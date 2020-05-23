@@ -1,20 +1,33 @@
 package main
 
 import (
-	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 )
 
 var lines []string
 var lineCount int
+var (
+	indexTmpl = template.Must(
+		template.ParseFiles(filepath.Join("templates", "index.html")),
+	)
+)
 
 func main() {
 	content, err := ioutil.ReadFile("./data/nouns.txt")
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,5 +57,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	randomIdx := rand.Intn(lineCount)
 	noun := lines[randomIdx]
-	fmt.Fprint(w, "Fuck ", noun)
+
+	if err := indexTmpl.Execute(w, noun); err != nil {
+		log.Printf("Error executing template: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
