@@ -7223,7 +7223,6 @@ blackness
 blacknesses
 blackout
 blackouts
-blacks
 blacksmith
 blacksmiths
 blackthorn
@@ -80770,7 +80769,6 @@ whiteners
 whiteness
 whitening
 whitenings
-whites
 whitesmith
 whitesmiths
 whitethorn
