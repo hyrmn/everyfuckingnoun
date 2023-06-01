@@ -4,14 +4,18 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"path/filepath"
 	"text/template"
 	"time"
+
+	_ "embed"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
 
-var indexTmpl = template.Must(template.ParseFiles(filepath.Join("templates", "index.html")))
+//go:embed templates/index.html
+var templateContent string
+
+var indexTmpl = template.Must(template.New("Index").Parse(templateContent))
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
