@@ -9,5 +9,5 @@ steps:
   - --source=.
   - --trigger-http
   - --allow-unauthenticated
-  - --entry-point=index
+  - --entry-point=Index
   - --runtime=go120
