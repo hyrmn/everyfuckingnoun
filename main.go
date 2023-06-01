@@ -2,38 +2,20 @@ package main
 
 import (
 	"html/template"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 )
 
-var lines []string
-var lineCount int
-var (
-	indexTmpl = template.Must(
-		template.ParseFiles(filepath.Join("templates", "index.html")),
-	)
-)
+//go:generate go run gen.go
+
+var indexTmpl = template.Must(template.ParseFiles(filepath.Join("templates", "index.html")))
 
 func main() {
-	content, err := ioutil.ReadFile("./data/nouns.txt")
 	rand.Seed(time.Now().UTC().UnixNano())
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	lines = strings.Split(string(content), "\n")
-	lineCount = len(lines)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -55,8 +37,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	randomIdx := rand.Intn(lineCount)
-	noun := lines[randomIdx]
+	randomIdx := rand.Intn(WordCount)
+	noun := Words[randomIdx]
 
 	w.Header().Add("Content-Type", "text/html; charset=utf-8")
 
