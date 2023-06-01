@@ -1,37 +1,24 @@
-package main
+package everyfuckingnoun
 
 import (
-	"html/template"
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"path/filepath"
+	"text/template"
 	"time"
-)
 
-//go:generate go run gen.go
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+)
 
 var indexTmpl = template.Must(template.ParseFiles(filepath.Join("templates", "index.html")))
 
-func main() {
+func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8181"
-		log.Printf("Defaulting to port %s", port)
-	}
-
-	http.HandleFunc("/", indexHandler)
-
-	log.Printf("Listening on port %s", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatal(err)
-	}
+	functions.HTTP("Index", index)
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func index(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
